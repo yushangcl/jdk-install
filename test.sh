@@ -80,6 +80,7 @@ case $val in
     10) echo "*******开始下载jdk10*******"
     if [ "$arch" -eq 32 ]; then
       echo "*******jdk10不支持32位操作系统，请选择64位安装*******"
+      exit 1
     else
       jdk=jdk-10.0.1_linux-x64_bin.tar.gz
       wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P /var/tmp/jdk "http://download.oracle.com/otn-pub/java/jdk/10.0.1+10/fb4372174a714e6b8c52526dc134031e/$jdk"
