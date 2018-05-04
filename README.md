@@ -6,17 +6,24 @@ It is a Shell Script which can build a JDK Server automatically.
 
 `HOW TO USE`
 
-jdk8
+jdk all
+```
+wget --no-check-certificate -O jdk-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk-install.sh && chmod +x jdk-install.sh && bash jdk-install.sh
+```
+jdk 8
 
 ```
-wget --no-check-certificate -O test.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/test.sh && chmod +x test.sh && bash test.sh
+wget --no-check-certificate -O jdk8-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk8-install.sh && chmod +x jdk8-install.sh && bash jdk8-install.sh
 ```
 
----
+jdk 7
+```
+wget --no-check-certificate -O jdk7-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk7-install.sh && chmod +x jdk7-install.sh && bash jdk7-install.sh
+```
 
-The following hardware platforms and operating systems are supported. More  hardware platforms and operating systems are coming.
+jdk 10 
+```
+wget --no-check-certificate -O jdk10-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk10-install.sh && chmod +x jdk10-install.sh && bash jdk10-install.sh
+```
 
-| Hardware Platform | Operating System            |
-| ----------------- | --------------------------- |
-| x86/i386          | Debian、Ubuntu、CentOS        |
-| x86-64/amd64      | Debian、Ubuntu、CentOS、Deepin |              
+**注意：安装完成后需要执行 source /etc/profile 命令**
