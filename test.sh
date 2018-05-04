@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#!/usr/bin/env bash
 #URL: https://github.com/yushangcl/jdk-install
 #E-mail: gayhub@live.cn
 clear
