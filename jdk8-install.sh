@@ -8,6 +8,21 @@ echo "    #                  Build JDK8                  #"
 echo "    #            https://blog.itbat.cn             #"
 echo "    #                Version 0.4.1                 #"
 echo "    ################################################"
+
+#检测是否已经安装java环境
+echo ""
+JAVA_VERSION=`java -version 2>&1 | head -1`
+if [[ "$JAVA_VERSION" == java* ]]; then
+    echo "检测到已安装的Java版本：$JAVA_VERSION"
+    echo ""
+    which=`which java`
+    echo "安装路径为 $which "
+    echo ""
+    echo "如果需要安装新的版本，请卸载当前版本后重新运行该脚本"
+    echo ""
+    exit
+fi
+
 #Prepare the installation environment
 echo -e ""
 echo -e "Prepare the installation environment."
