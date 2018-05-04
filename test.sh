@@ -44,7 +44,7 @@ echo "jdk8 请输入：8"
 echo "jdk10 请输入：10"
 read -p "请输入：" val
 if [  ! -n "$val" ]; then
-    echo "*******开始安装默认jdk8*******"
+    echo "*******开始下载默认jdk8*******"
     if [ "$arch" -eq 32 ]; then
       jdk=jdk-8u171-linux-i586.tar.gz
       wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"  -P /var/tmp/jdk "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
@@ -53,7 +53,7 @@ if [  ! -n "$val" ]; then
       wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P /var/tmp/jdk "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
     fi
 elif [ "$val" -eq 7 ]; then
-    echo "*******开始安装jdk7*******"
+    echo "*******开始下载jdk7*******"
     if [ "$arch" -eq 32 ]; then
       jdk=jdk-7u80-linux-i586.tar.gz
       # 由于oracle官网需要登录下载jdk7 则现在从cos下载
@@ -63,7 +63,7 @@ elif [ "$val" -eq 7 ]; then
       wget http://dev-1251506639.cossh.myqcloud.com/jdk/jdk7/"$jdk" -P /var/tmp/jdk
     fi
 elif [ "$val" -eq 8 ];then
-    echo "*******开始安装jdk8*******"
+    echo "*******开始下载jdk8*******"
      if [ "$arch" -eq 32 ]; then
       jdk=jdk-8u171-linux-i586.tar.gz
       wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"  -P /var/tmp/jdk "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
@@ -72,7 +72,7 @@ elif [ "$val" -eq 8 ];then
       wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P /var/tmp/jdk "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
     fi
 elif [ "$val" -eq 10 ];then
-    echo "*******开始安装jdk10*******"
+    echo "*******开始下载jdk10*******"
     if [ "$arch" -eq 32 ]; then
       echo "*******jdk10不支持32位操作系统，请选择64位安装*******"
     else
@@ -84,17 +84,23 @@ else
 fi
 
 #tar mv /usr/local/jdk
-echo "*******解压$jdk 安装目录/usr/local/jdk/*******"
+echo "*******开始解压*******"
+echo "解压$jdk 到安装目录/usr/local/jdk/"
 mkdir /usr/local/jdk
 tar xzf /var/tmp/jdk/"$jdk" -C /usr/local/jdk/ && rm -rf /var/tmp/jdk/"$jdk"
 
 # PATH
+echo ""
 echo "*******添加环境变量*******"
 cd /usr/local/jdk/jdk*
 home=$(cd `dirname $0`; pwd)
+echo "*******JAVA_HOME=${home}*******"
+echo ""
+echo "#JAVA_HOME" >> /etc/profile
 echo "JAVA_HOME=${home}" >> /etc/profile
 echo "CLASSPATH=\$JAVA_HOME/lib" >> /etc/profile
 echo "PATH=\$PATH:\$JAVA_HOME/bin" >> /etc/profile
 
 echo "*******安装结束********"
+echo ""
 echo "请手动执行命令：source /etc/profile "

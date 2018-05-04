@@ -9,7 +9,7 @@ It is a Shell Script which can build a JDK Server automatically.
 jdk8
 
 ```
-wget --no-check-certificate -O jdk8-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk8-install.sh && chmod +x jdk8-install.sh && bash jdk8-install.sh
+wget --no-check-certificate -O test.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/test.sh && chmod +x test.sh && bash test.sh
 ```
 
 ---
