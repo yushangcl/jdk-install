@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #!/usr/bin/env bash
-#URL: https://github.com/yushangcl/jdk-install
+#URL: https://github.com/yushangcl/shell-install
 #E-mail: gayhub@live.cn
 clear
 echo "    ################################################"
