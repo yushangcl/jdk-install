@@ -44,6 +44,7 @@ check_sys(){
         release="centos"
     fi
     bit=$(uname -m)
+    echo "系统环境：$release $bit"
 }
 
 #检查安装状态
