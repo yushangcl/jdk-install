@@ -15,7 +15,7 @@ port=8080
 tomcat="apache-tomcat-7.0.86.tar.gz"
 tomcat_install_path="/usr/local/tomcat"
 tomcat_temp="/var/tmp/tomcat"
-tomcat_conf="/etc/init.d/tomcat"
+tomcat_install_path_=${tomcat_install_path}
 
 # 设置展示颜色
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -45,7 +45,7 @@ check_sys(){
 }
 
 #检查是否安装java环境
-check_installed_status(){
+check_java_status(){
    java=`java -version 2>&1 | head -1`
    if [[ "$java" == java* ]]; then
      echo " 检测到已安装的Java版本：$java"
@@ -53,6 +53,10 @@ check_installed_status(){
    else
      echo " 未检测到Java环境，请安装Java环境后再执行该脚本" exit 1
    fi
+}
+
+check_installed_status(){
+    [[ ! -e ${tomcat_install_path} ]] && echo -e "${Error} Cloud Torrent 没有安装，请检查 !" && exit 1
 }
 
 check_pid(){
@@ -131,7 +135,7 @@ Install_tomcat(){
     echo && echo -e "${Info} 开始检查 系统环境..."
 #    check_sys
     echo && echo -e "${Info} 开始检查 安装状态..."
-#    check_installed_status
+#    check_java_status
     echo && echo -e "${Info} 开始设置 安装版本..."
 #    set_version
     echo && echo -e "${Info} 开始下载 Tomcat安装包..."
@@ -147,8 +151,103 @@ Install_tomcat(){
     echo && echo -e "${Info} 开始添加 环境变量..."
 #    add_path
     echo && echo -e "${Info} 开始创建 配置文件..."
-    create_init
+#    create_init
     echo && echo -e "${Info} 所有步骤 安装完毕，开始启动..."
 }
 
-Install_tomcat
+get_tomcat_install_path(){
+   path="$tomcat_install_path/${tomcat%.*}"
+   tomcat_install_path_="${path%.*}"
+}
+
+Start_tomcat(){
+    check_installed_status
+    check_pid
+    get_tomcat_install_path
+    [[ ! -z ${PID} ]] && echo -e "${Error} Tomcat 正在运行，请检查 !" && exit 1
+    ${tomcat_install_path_}/bin/startup.sh
+    exit 1
+}
+Stop_tomcat(){
+    check_installed_status
+    check_pid
+    get_tomcat_install_path
+    [[ -z ${PID} ]] && echo -e "${Error} Tomcat 没有运行，请检查 !" && exit 1
+     ${tomcat_install_path_}/bin/shutdown.sh
+    exit 1
+}
+Restart_tomcat(){
+    check_installed_status
+    check_pid
+    get_tomcat_install_path
+    [[ ! -z ${PID} ]] && /usr/local/tomcat/apache-tomcat-7.0.86/bin/shutdown.sh
+     ${tomcat_install_path_}/bin/startup.sh
+}
+
+Uninstall_ct(){
+    check_installed_status
+    echo "确定要卸载 Cloud Torrent ? (y/N)"
+    echo
+    stty erase '^H' && read -p "(默认: n):" unyn
+    [[ -z ${unyn} ]] && unyn="n"
+    if [[ ${unyn} == [Yy] ]]; then
+        check_pid
+        [[ ! -z $PID ]] && kill -9 ${PID}
+        Read_config
+        Del_iptables
+        rm -rf ${file} && rm -rf /etc/init.d/cloudt
+        if [[ ${release} = "centos" ]]; then
+            chkconfig --del cloudt
+        else
+            update-rc.d -f cloudt remove
+        fi
+        echo && echo "Cloud torrent 卸载完成 !" && echo
+    else
+        echo && echo "卸载已取消..." && echo
+    fi
+}
+echo && echo -e "请输入一个数字来选择选项
+
+ ${Green_font_prefix}1.${Font_color_suffix} 安装 Tomcat
+ ${Green_font_prefix}2.${Font_color_suffix} 升级 Tomcat
+ ${Green_font_prefix}3.${Font_color_suffix} 卸载 Tomcat
+————————————
+ ${Green_font_prefix}4.${Font_color_suffix} 启动 Tomcat
+ ${Green_font_prefix}5.${Font_color_suffix} 停止 Tomcat
+ ${Green_font_prefix}6.${Font_color_suffix} 重启 Tomcat
+————————————" && echo
+if [[ -e ${tomcat_install_path} ]]; then
+	check_pid
+	if [[ ! -z "${PID}" ]]; then
+		echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} 并 ${Green_font_prefix}已启动${Font_color_suffix}"
+	else
+		echo -e " 当前状态: ${Green_font_prefix}已安装${Font_color_suffix} 但 ${Red_font_prefix}未启动${Font_color_suffix}"
+	fi
+else
+	echo -e " 当前状态: ${Red_font_prefix}未安装${Font_color_suffix}"
+fi
+echo
+stty erase '^H' && read -p " 请输入数字 [1-9]:" num
+case "$num" in
+	1)
+	Install_tomcat
+	;;
+	2)
+	echo "该功能未实现" exit 1
+	;;
+	3)
+	Uninstall_ct
+	;;
+	4)
+	Start_tomcat
+	;;
+	5)
+	Stop_tomcat
+	;;
+	6)
+	Restart_tomcat
+	;;
+	*)
+	echo "请输入正确数字 [1-6]"
+	;;
+esac
