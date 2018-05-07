@@ -53,8 +53,7 @@ check_installed_status(){
    if [[ "$java" == java* ]]; then
      echo "检测到已安装的Java版本：$java"
      echo ""
-     which=`which java`
-     echo "安装路径为 $which "
+     echo "安装路径为:" `which java`
      echo ""
      echo "如果需要安装新的版本，请卸载当前版本后重新运行该脚本"
      echo ""
@@ -121,7 +120,6 @@ download(){
         echo "${Error}请输入正确数字 [1-3]" && exit 1
         ;;
     esac
-
 }
 
 #解压安装
@@ -164,5 +162,6 @@ Install_jdk
 
 echo
 echo "*******安装结束********"
+echo "安装路径为:" `which java`
 echo ""
 echo "${Tip}请手动执行命令：source /etc/profile "
