@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-export PATH
-
 #URL: https://github.com/yushangcl/jdk-install
 #E-mail: gayhub@live.cn
 clear
@@ -51,18 +48,27 @@ check_sys(){
 
 #检查安装状态
 check_installed_status(){
-JAVA_VERSION=`java -version 2>&1 | head -1`
-    [[ "$JAVA_VERSION" == java* ]] && echo -e "${Error} 检测到已安装的Java版本：$JAVA_VERSION " && exit 1
+   java=`java -version 2>&1 | head -1`
+   if [[ "$java" == java* ]]; then
+     echo "检测到已安装的Java版本：$java"
+     echo ""
+     which=`which java`
+     echo "安装路径为 $which "
+     echo ""
+     echo "如果需要安装新的版本，请卸载当前版本后重新运行该脚本"
+     echo ""
+     exit
+   fi
 }
 
 #用户设置安装版本
-set_version() {
+set_version(){
     echo && echo -e "请输入一个数字来选择选项"
     echo -e " ${Green_font_prefix}1.${Font_color_suffix} 安装 JDK 7"
     echo -e " ${Green_font_prefix}2.${Font_color_suffix} 安装 JDK 8"
     echo -e " ${Green_font_prefix}3.${Font_color_suffix} 安装 JDK 10"
     echo
-    stty erase '^H' && read -p " 请输入数字 [1-9]:" choice_mun
+    stty erase '^H' && read -p " 请输入数字 [1-3]:" choice_mun
     echo
 
 }
@@ -99,7 +105,7 @@ download_jdk10(){
 }
 
 # 下载安装包
-download() {
+download(){
     case "$choice_mun" in
         1)
         download_jdk7
@@ -127,7 +133,7 @@ tar_install(){
 }
 
 #设置环境变量
-add_path() {
+add_path(){
     cd $jdk_file_path/jdk*
     home=$(cd `dirname $0`; pwd)
     echo "#JAVA_HOME" >> /etc/profile
@@ -137,7 +143,7 @@ add_path() {
 }
 
 #主方法
-Install_jdk() {
+Install_jdk(){
     echo && echo -e "${Info} 开始检查 系统环境..."
     check_sys
     echo && echo -e "${Info} 开始检查 安装状态..."
