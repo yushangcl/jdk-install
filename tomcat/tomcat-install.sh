@@ -15,7 +15,7 @@ port=8080
 tomcat="apache-tomcat-7.0.86.tar.gz"
 tomcat_install_path="/usr/local/tomcat"
 tomcat_temp="/var/tmp/tomcat"
-tomcat_install_path_=${tomcat_install_path}
+tomcat_install_path_
 
 # 设置展示颜色
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -156,8 +156,8 @@ Install_tomcat(){
 }
 
 get_tomcat_install_path(){
-   path="$tomcat_install_path/${tomcat%.*}"
-   tomcat_install_path_="${path%.*}"
+   cd $tomcat_install_path/apache-tomcat*
+   tomcat_install_path_=$(cd `dirname $0`; pwd)
 }
 
 Start_tomcat(){
