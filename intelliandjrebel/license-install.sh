@@ -96,6 +96,8 @@ echo && echo -e "请输入一个数字来选择选项
  ${Green_font_prefix}4.${Font_color_suffix} 启动 JetLicense
  ${Green_font_prefix}5.${Font_color_suffix} 停止 JetLicense
  ${Green_font_prefix}6.${Font_color_suffix} 重启 JetLicense
+————————————
+ ${Green_font_prefix}7.${Font_color_suffix} 退出 安装！
 ————————————" && echo
 if [[ -e ${license_install_path} ]]; then
 	check_pid
@@ -108,15 +110,17 @@ else
 	echo -e " 当前状态: ${Red_font_prefix}未安装${Font_color_suffix}"
 fi
 echo
-stty erase '^H' && read -p " 请输入数字 [1-6]:" num
+stty erase '^H' && read -p " 请输入数字 [1-7]:" num
 case "$num" in
 	1)
 	Install_license
+	Restart_license
 	;;
 	2)
 	echo "该功能未实现" exit 1
 	;;
 	3)
+	Stop_license
 	Uninstall_license
 	;;
 	4)
@@ -128,10 +132,10 @@ case "$num" in
 	6)
 	Restart_license
 	;;
+	7)
+	exit 1
+	;;
 	*)
-	echo "请输入正确数字 [1-6]"
+	echo "请输入正确数字 [1-7]"
 	;;
 esac
-
-
-
