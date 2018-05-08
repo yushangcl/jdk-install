@@ -2,28 +2,18 @@
 `version 0.1.1`
 `20180504`
 
-It is a Shell Script which can build a JDK Server automatically.
-
-`HOW TO USE`
-
-jdk all
-```
+### jdk 
+```bash
 wget --no-check-certificate -O jdk-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk-install.sh && chmod +x jdk-install.sh && bash jdk-install.sh
 ```
-jdk 8
-
-```
-wget --no-check-certificate -O jdk8-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk8-install.sh && chmod +x jdk8-install.sh && bash jdk8-install.sh
-```
-
-jdk 7
-```
-wget --no-check-certificate -O jdk7-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk7-install.sh && chmod +x jdk7-install.sh && bash jdk7-install.sh
-```
-
-jdk 10 
-```
-wget --no-check-certificate -O jdk10-install.sh https://raw.githubusercontent.com/yushangcl/jdk-install/master/jdk10-install.sh && chmod +x jdk10-install.sh && bash jdk10-install.sh
-```
-
 **注意：安装完成后需要执行 source /etc/profile 命令**
+
+### license install
+```
+wget --no-check-certificate -O license-install.sh https://raw.github.com/yushangcl/shell-install/master/intelliandjrebel/license-install.sh && chmod +x license-install.sh && bash license-install.sh
+```
+
+### Tomcat install
+```
+wget --no-check-certificate -O tomcat-install.sh https://raw.github.com/yushangcl/shell-install/master/tomcat/tomcat-install.sh && chmod +x tomcat-install.sh && bash tomcat-install.sh
+```

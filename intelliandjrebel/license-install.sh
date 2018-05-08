@@ -50,20 +50,22 @@ check_installed_status(){
    fi
 }
 
+#检查server是否启动
 check_pid(){
     PID=$(ps -ef | grep LicenseServer-1.0-jar-with-dependencies.jar | grep -v grep | awk '{print $2}')
 }
 
-
+#安装
 Install_license(){
     wget -P ${license_install_path} "https://github.com/yushangcl/LicenseServer/releases/download/1.0.0/LicenseServer-1.0-jar-with-dependencies.jar"
 }
 
+#卸载
 Uninstall_license(){
     rm -rf ${license_install_path}
 }
 
-
+#启动
 Start_license(){
     check_installed_status
     check_pid
@@ -71,6 +73,8 @@ Start_license(){
     nohup java -jar ${license_install_path}/LicenseServer-1.0-jar-with-dependencies.jar  -p 8081 >license.out 2>&1 &
     exit 1
 }
+
+#停止
 Stop_license(){
     check_installed_status
     check_pid
@@ -78,14 +82,14 @@ Stop_license(){
     kill ${PID}
     exit 1
 }
+
+#重启
 Restart_license(){
     check_installed_status
     check_pid
     [[ ! -z ${PID} ]] &&  kill ${PID}
     nohup java -jar ${license_install_path}/LicenseServer-1.0-jar-with-dependencies.jar  -p 8081 >license.out 2>&1 &
 }
-
-
 
 echo && echo -e "请输入一个数字来选择选项
 
@@ -139,3 +143,6 @@ case "$num" in
 	echo "请输入正确数字 [1-7]"
 	;;
 esac
+
+
+

@@ -6,7 +6,7 @@ It is a Shell Script which can build a Jrebel IntelliJ license Server automatica
 
 `HOW TO USE`
 
-jdk install
+license install
 ```
 wget --no-check-certificate -O license-install.sh https://raw.github.com/yushangcl/shell-install/master/intelliandjrebel/license-install.sh && chmod +x license-install.sh && bash license-install.sh
 ```
