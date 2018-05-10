@@ -29,12 +29,12 @@ else
 fi
 #Build KMS Server
 if cat /etc/*-release | grep -Eqi "raspbian"; then
-    wget --no-check-certificate -O kms https://raw.githubusercontent.com/yushangcl/kms/binaries/Linux/arm/little-endian/glibc/vlmcsd-armv6hf-Raspberry-glibc
+    wget --no-check-certificate -O kms https://raw.githubusercontent.com/yushangcl/shell-install/master/kms/binaries/Linux/arm/little-endian/glibc/vlmcsd-armv6hf-Raspberry-glibc
 else
   if [ "$arch" -eq 32 ]; then
-    wget --no-check-certificate -O kms https://raw.githubusercontent.com/yushangcl/kms/binaries/Linux/intel/glibc/vlmcsd-x32-glibc
+    wget --no-check-certificate -O kms https://raw.githubusercontent.com/yushangcl/shell-install/master/kms/binaries/Linux/intel/glibc/vlmcsd-x32-glibc
   else
-    wget --no-check-certificate -O kms https://raw.githubusercontent.com/yushangcl/kms/binaries/Linux/intel/glibc/vlmcsd-x64-glibc
+    wget --no-check-certificate -O kms https://raw.githubusercontent.com/yushangcl/shell-install/master/kms/binaries/Linux/intel/glibc/vlmcsd-x64-glibc
   fi
 fi
 mv kms /usr/bin/
