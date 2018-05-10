@@ -13,10 +13,10 @@ echo -e ""
 echo -e "Prepare the installation environment."
 if cat /etc/*-release | grep -Eqi "centos|red hat|redhat"; then
   echo "RPM-based"
-  yum -y install git
+  yum -y install wget
 elif cat /etc/*-release | grep -Eqi "debian|ubuntu|deepin"; then
   echo "Debian-based"
-  apt-get -y install git
+  apt-get -y install wget
 else
   echo "This release is not supported."
   exit
@@ -28,14 +28,13 @@ else
   arch=32
 fi
 #Build KMS Server
-git clone https://github.com/yushangcl/JRebelServer
 if cat /etc/*-release | grep -Eqi "raspbian"; then
-  mv JRebelServer/binaries/ReverseProxy_linux_arm jrebel
+    wget --no-check-certificate -O jrebel https://raw.githubusercontent.com/yushangcl/shell-install/master/jrebel/binaries/ReverseProxy_linux_arm
 else
   if [ "$arch" -eq 32 ]; then
-    mv JRebelServer/binaries/ReverseProxy_linux_386 jrebel
+    wget --no-check-certificate -O jrebel https://raw.githubusercontent.com/yushangcl/shell-install/master/jrebel/binaries/ReverseProxy_linux_386
   else
-    mv JRebelServer/binaries/ReverseProxy_linux_amd64 jrebel
+    wget --no-check-certificate -O jrebel https://raw.githubusercontent.com/yushangcl/shell-install/master/jrebel/binaries/ReverseProxy_linux_amd64
   fi
 fi
 mv jrebel /usr/bin/

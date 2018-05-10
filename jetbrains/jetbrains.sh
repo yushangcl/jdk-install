@@ -13,10 +13,10 @@ echo -e ""
 echo -e "Prepare the installation environment."
 if cat /etc/*-release | grep -Eqi "centos|red hat|redhat"; then
   echo "RPM-based"
-  yum -y install git
+  yum -y install wget
 elif cat /etc/*-release | grep -Eqi "debian|ubuntu|deepin"; then
   echo "Debian-based"
-  apt-get -y install git
+  apt-get -y install wget
 else
   echo "This release is not supported."
   exit
@@ -28,14 +28,13 @@ else
   arch=32
 fi
 #Build Jetbrains Server
-git clone https://github.com/yushangcl/JetbrainsServer
 if cat /etc/*-release | grep -Eqi "raspbian"; then
-  mv JetbrainsServer/binaries/IntelliJIDEALicenseServer_linux_arm jetbrains
+    wget --no-check-certificate -O jetbrains https://raw.githubusercontent.com/yushangcl/shell-install/master/jetbrains/binaries/IntelliJIDEALicenseServer_linux_arm
 else
   if [ "$arch" -eq 32 ]; then
-    mv JetbrainsServer/binaries/IntelliJIDEALicenseServer_linux_i386 jetbrains
+    wget --no-check-certificate -O jetbrains https://raw.githubusercontent.com/yushangcl/shell-install/master/jetbrains/binaries/IntelliJIDEALicenseServer_linux_linux_i386
   else
-    mv JetbrainsServer/binaries/IntelliJIDEALicenseServer_linux_amd64 jetbrains
+    wget --no-check-certificate -O jetbrains https://raw.githubusercontent.com/yushangcl/shell-install/master/jetbrains/binaries/IntelliJIDEALicenseServer_linux_amd64
   fi
 fi
 mv jetbrains /usr/bin/

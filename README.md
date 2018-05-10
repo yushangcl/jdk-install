@@ -17,3 +17,18 @@ wget --no-check-certificate -O license-install.sh https://raw.github.com/yushang
 ```
 wget --no-check-certificate -O tomcat-install.sh https://raw.github.com/yushangcl/shell-install/master/tomcat/tomcat-install.sh && chmod +x tomcat-install.sh && bash tomcat-install.sh
 ```
+
+### kms install
+```
+wget --no-check-certificate -O kms.sh https://raw.githubusercontent.com/yushangcl/shell-install/master/kms/kms.sh && chmod +x kms.sh && bash kms.sh
+```
+
+### jetbrains install
+```
+wget --no-check-certificate -O jetbrains.sh https://raw.github.com/yushangcl/shell-install/master/tojetbrainsmcat/jetbrains.sh && chmod +x jetbrains.sh && bash jetbrains.sh
+```
+
+### jrebel install
+```
+wget --no-check-certificate -O jrebel.sh https://raw.githubusercontent.com/yushangcl/shell-install/master/jrebel/jrebel.sh && chmod +x jrebel.sh && bash jrebel.sh
+```

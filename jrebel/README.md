@@ -7,7 +7,7 @@ It is a Shell Script which can build a JRebel Server automatically.
 `HOW TO USE`
 
 ```
-wget --no-check-certificate -O jrebel.sh https://raw.githubusercontent.com/yushangcl/JRebelServer/master/jrebel.sh && chmod +x jrebel.sh && bash jrebel.sh
+wget --no-check-certificate -O jrebel.sh https://raw.githubusercontent.com/yushangcl/shell-install/master/jrebel/jrebel.sh && chmod +x jrebel.sh && bash jrebel.sh
 ```
 
 ---
