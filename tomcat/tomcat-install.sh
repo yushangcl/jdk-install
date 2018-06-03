@@ -133,21 +133,21 @@ Set_iptables(){
 #主方法
 Install_tomcat(){
     echo && echo -e "${Info} 开始检查 系统环境..."
-#    check_sys
+    check_sys
     echo && echo -e "${Info} 开始检查 安装状态..."
-#    check_java_status
+    check_java_status
     echo && echo -e "${Info} 开始设置 安装版本..."
-#    set_version
+    set_version
     echo && echo -e "${Info} 开始下载 Tomcat安装包..."
-#    download
+    download
     echo && echo -e "${Info} 解压安装中..."
-#    tar_install
+    tar_install
     echo && echo -e "${Info} 开始设置 iptables防火墙..."
-#    Set_iptables
+    Set_iptables
     echo && echo -e "${Info} 开始添加 iptables防火墙规则..."
-#    Add_iptables
+    Add_iptables
     echo && echo -e "${Info} 开始保存 iptables防火墙规则..."
-#    Save_iptables
+    Save_iptables
     echo && echo -e "${Info} 开始添加 环境变量..."
 #    add_path
     echo && echo -e "${Info} 开始创建 配置文件..."
