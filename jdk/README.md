@@ -13,7 +13,7 @@ wget --no-check-certificate -O jdk-install.sh https://raw.github.com/yushangcl/s
 
 jre install
 ```bash
-wget --no-check-certificate -O jre-install.sh https://raw.github.com/yushangcl/shell-install/master/jre/jre-install.sh && chmod +x jre-install.sh && bash jre-install.sh
+wget --no-check-certificate -O jre-install.sh https://raw.github.com/yushangcl/shell-install/master/jdk/jre-install.sh && chmod +x jre-install.sh && bash jre-install.sh
 ```
 
 **注意：安装完成后需要执行 source /etc/profile 命令**
