@@ -75,7 +75,7 @@ set_version(){
 
 
 download_jdk8(){
-      wget --no-cookies --no-check-certificate --header -O $jdk "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P ${jdk_temp} "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=233162_512cd62ec5174c3487ac17c61aaa89e8"
+      wget --no-cookies --no-check-certificate  -O "$jdk"  -P ${jdk_temp} "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=233162_512cd62ec5174c3487ac17c61aaa89e8"
 }
 
 # 下载安装包
