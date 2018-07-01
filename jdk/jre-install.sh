@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
-#URL: https://github.com/shell-install/jdk/jdk-install
+#URL: https://github.com/shell-install/jdk/jre-install
 #E-mail: gayhub@live.cn
 clear
 echo "    ################################################"
 echo "    #                                              #"
-echo "    #                  Build JDK                   #"
+echo "    #                  Build JRE                   #"
 echo "    #            https://blog.itbat.cn             #"
 echo "    #                Version 0.4.1                 #"
 echo "    ################################################"
 echo
 
 #jdk安装路径
-jdk_file_path="/usr/local/jdk"
+jdk_file_path="/usr/local/jre"
 
 #jdk下载临时目录
-jdk_temp="/var/tmp/jdk"
+jdk_temp="/var/tmp/jre"
 choice_mun=0
 
 #默认jdk版本
-jdk="jdk-8u171-linux-x64.tar.gz"
+jdk="jre-8u171-linux.tar.gz"
 
 # 设置展示颜色
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -74,47 +74,21 @@ set_version(){
 }
 
 
-download_jdk7(){
-    if [[ ${bit} == "x86_64" ]]; then
-      jdk=jdk-7u80-linux-x64.tar.gz
-      wget http://dev-1251506639.cossh.myqcloud.com/jdk/jdk7/"$jdk" -P ${jdk_temp}
-    else
-      jdk=jdk-7u80-linux-i586.tar.gz
-      # 由于oracle官网需要登录下载jdk7 则现在从cos下载
-      wget http://dev-1251506639.cossh.myqcloud.com/jdk/jdk7/"$jdk" -P ${jdk_temp}
-    fi
-}
-
 download_jdk8(){
-    if [[ ${bit} == "x86_64" ]]; then
-      jdk=jdk-8u171-linux-x64.tar.gz
-      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P ${jdk_temp} "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
-    else
-      jdk=jdk-8u171-linux-i586.tar.gz
-      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"  -P ${jdk_temp} "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
-    fi
-}
-
-download_jdk10(){
-    if [[ ${bit} == "x86_64" ]]; then
-      jdk=jdk-10.0.1_linux-x64_bin.tar.gz
-      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P ${jdk_temp} "http://download.oracle.com/otn-pub/java/jdk/10.0.1+10/fb4372174a714e6b8c52526dc134031e/$jdk"
-    else
-      echo "${Error}*******jdk10不支持32位操作系统，请选择64位安装*******" && exit 1
-    fi
+      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -O "$jdk"  -P ${jdk_temp} "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=233162_512cd62ec5174c3487ac17c61aaa89e8"
 }
 
 # 下载安装包
 download(){
     case "$choice_mun" in
         1)
-        download_jdk7
+        #download_jdk7
         ;;
         2)
         download_jdk8
         ;;
         3)
-        download_jdk10
+        #download_jdk10
         ;;
         *)
         echo "${Error}请输入正确数字 [1-3]" && exit 1
