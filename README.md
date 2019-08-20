@@ -32,3 +32,8 @@ wget --no-check-certificate -O jetbrains.sh https://raw.github.com/yushangcl/she
 ```
 wget --no-check-certificate -O jrebel.sh https://raw.githubusercontent.com/yushangcl/shell-install/master/jrebel/jrebel.sh && chmod +x jrebel.sh && bash jrebel.sh
 ```
+
+### pinpoint install
+```
+wget --no-check-certificate -O pinpoint.sh https://raw.githubusercontent.com/yushangcl/shell-install/master/pinpoint/pinpoint.sh && chmod +x pinpoint.sh && bash pinpoint.sh
+```
