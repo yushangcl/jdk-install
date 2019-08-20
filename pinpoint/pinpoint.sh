@@ -40,6 +40,41 @@ check_docker_compose_installed_status(){
    fi
 }
 
+install_docker() {
+   # 检查docker是否安装
+   docker=`docker version 2>&1 | head -1`
+   if [[ "$docker" == *Docker* ]]; then
+     echo  -e "${Error} 检测到 Docker环境 已安装" && exit 1
+     echo ""
+   else
+     echo ""
+   fi
+    yum update -y
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    yum install -y docker-ce
+    sudo mkdir -p /etc/docker
+    sudo tee /etc/docker/daemon.json <<-'EOF'
+        {
+          "registry-mirrors": ["https://4xfke570.mirror.aliyuncs.com"]
+        }
+EOF
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
+}
+
+install_docker_compose(){
+   docker=`docker-compose version 2>&1 | head -1`
+   if [[ "$docker" == docker-compose* ]]; then
+     echo  -e "${Error} 检测到 Docker-compose环境 已安装" && exit 1
+     echo ""
+   else
+     echo ""
+   fi
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+}
+
 # 检查pinpoint是否启动
 check_pid_pinpoint_collector(){
     exist=`docker inspect --format '{{.State.Running}}' pinpoint-collector`
@@ -223,11 +258,13 @@ echo && echo -e "请输入一个数字来选择选项
  ${Green_font_prefix}4.${Font_color_suffix} 重    启 pinpoint服務
  ${Green_font_prefix}5.${Font_color_suffix} 删除重启 pinpoint服務
  ${Green_font_prefix}6.${Font_color_suffix} 删除容器 pinpoint服務
+ ${Green_font_prefix}7.${Font_color_suffix} 删除容器 pinpoint服務
+ ${Green_font_prefix}8.${Font_color_suffix} 删除容器 pinpoint服務
 ————————————
- ${Green_font_prefix}7.${Font_color_suffix} 退出！
+ ${Green_font_prefix}9.${Font_color_suffix} 退出！
 ————————————" && echo
 
-stty erase '^H' && read -p " 请输入数字 [1-7]:" num
+stty erase '^H' && read -p " 请输入数字 [1-9]:" num
 case "$num" in
 	1)
 	install_start_pinpoint
@@ -249,10 +286,16 @@ case "$num" in
 	rm_pinpoint
 	;;
 	7)
+	install_docker
+	;;
+	8)
+	install_docker_compose
+	;;
+	9)
 	exit 1
 	;;
 	*)
-	echo "请输入正确数字 [1-7]"
+	echo "请输入正确数字 [1-9]"
 	;;
 esac
 
