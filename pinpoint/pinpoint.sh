@@ -362,7 +362,7 @@ echo && echo -e "请输入一个数字来选择选项
  ${Green_font_prefix}2.${Font_color_suffix} 启    动    pinpoint服務
  ${Green_font_prefix}3.${Font_color_suffix} 停    止    pinpoint服務
  ${Green_font_prefix}4.${Font_color_suffix} 重    启    pinpoint服務
- ${Green_font_prefix}5.${Font_color_suffix} 删除重启    pinpoint服務
+ ${Green_font_prefix}5.${Font_color_suffix} 删除重启    pinpoint服務 (删除容器并重新构建启动)
  ${Green_font_prefix}6.${Font_color_suffix} 删除容器    pinpoint服務
  ${Green_font_prefix}7.${Font_color_suffix} 删除镜像    pinpoint服務
 ————————————
@@ -371,7 +371,7 @@ echo && echo -e "请输入一个数字来选择选项
 ————————————
  ${Green_font_prefix}0.${Font_color_suffix} 退出！
 ————————————"
-echo "文档地址：﻿http://t.cn/AiQX0ptN" && echo
+echo -e "${Tip}文档地址：﻿http://t.cn/AiQX0ptN" && echo
 
 stty erase '^H' && read -p " 请输入数字 [0-9]:" num
 case "$num" in
