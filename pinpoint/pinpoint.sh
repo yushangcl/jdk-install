@@ -106,11 +106,9 @@ install_docker() {
    # 检查docker是否安装
    check_docker_installed_status
    if [[ "$docker" == *Docker* ]]; then
-     echo  -e "${Error} 检测到 Docker环境 已安装" && exit 1
+     echo  -e "${Error} 检测到 Docker环境 已安装"
      echo ""
    else
-     echo ""
-   fi
     yum update -y
     yum install -y yum-utils device-mapper-persistent-data lvm2
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -126,20 +124,21 @@ EOF
     sudo systemctl restart docker
 
     echo  -e "${Info} Docker环境 已成功安装"
+   fi
+
 }
 # 安装docker_compose
 install_docker_compose(){
    check_docker_compose_installed_status
    if [[ "$docker" == docker-compose* ]]; then
-     echo  -e "${Error} 检测到 Docker-compose环境 已安装" && exit 1
+     echo  -e "${Error} 检测到 Docker-compose环境 已安装"
      echo ""
    else
-     echo ""
+     sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+     sudo chmod +x /usr/local/bin/docker-compose
+     echo  -e "${Info} Docker-compose环境 已成功安装"
    fi
-    sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
 
-    echo  -e "${Info} Docker-compose环境 已成功安装"
 }
 
 # 检查pinpoint是否启动
