@@ -50,12 +50,18 @@ check_installed_status(){
 install_docker(){
 
    if ${release} | grep -Eqi "centos"; then
-     yum update
+     yum update -y
      yum install -y yum-utils device-mapper-persistent-data lvm2
      yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-     yum install docker-ce
-     systemctl start docker
-     systemctl enable docker
+     yum install -y docker-ce
+     sudo mkdir -p /etc/docker
+     sudo tee /etc/docker/daemon.json <<-'EOF'
+        {
+          "registry-mirrors": ["https://4xfke570.mirror.aliyuncs.com"]
+        }
+EOF
+    sudo systemctl daemon-reload
+    sudo systemctl restart docker
    elif ${release} | grep -Eqi "debian|ubuntu"; then
      apt-get update
      apt-get install \
@@ -65,3 +71,6 @@ install_docker(){
      software-properties-common
    fi
 }
+check_sys
+#check_installed_status
+install_docker
