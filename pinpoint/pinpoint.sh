@@ -304,12 +304,11 @@ useless() {
 
 echo_success_Info(){
     echo
-    echo
     echo -e "${Info} ---------------PINPOINT服务访问的地址----------------"
     echo -e "${Info} PINPOINT平台地址：http://127.0.0.1:8079/#/main"
     echo
     echo -e "${Info} ---------------pinpoint-agent下载地址----------------"
-    echo "https://upload-1251506627.cos.ap-shanghai.myqcloud.com/pinpoint-agent-1.8.4.tar.gz"
+    echo -e "${Info} https://upload-1251506627.cos.ap-shanghai.myqcloud.com/pinpoint-agent-1.8.4.tar.gz"
     echo
 }
 
@@ -369,7 +368,8 @@ echo && echo -e "请输入一个数字来选择选项
  ${Green_font_prefix}8.${Font_color_suffix} 安装Compose pinpoint服務
 ————————————
  ${Green_font_prefix}9.${Font_color_suffix} 退出！
-————————————" && echo
+————————————"
+echo "文档地址：﻿http://t.cn/AiQX0ptN" && echo
 
 stty erase '^H' && read -p " 请输入数字 [1-9]:" num
 case "$num" in
