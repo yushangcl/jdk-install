@@ -20,29 +20,59 @@ install_path="/usr/local/pinpoint"
 #检查安装状态
 check_docker_installed_status(){
    docker=`docker version 2>&1 | head -1`
-   if [[ "$docker" == *Docker* ]]; then
-     echo  -e "${Info} 检测到 Docker环境 已安装"
-     echo ""
-   else
-     echo -e "${Error} Docker环境 未安装，请先安装 !" && exit 1
-     echo ""
-   fi
-}
 
+}
 check_docker_compose_installed_status(){
    docker=`docker-compose version 2>&1 | head -1`
-   if [[ "$docker" == docker-compose* ]]; then
-     echo  -e "${Info} 检测到 Docker-compose环境 已安装"
-     echo ""
+}
+
+
+check_docker_installed(){
+    check_docker_installed_status
+   if [[ "$docker" == *Docker* ]]; then
+      echo  -e "${Info} 检测到 Docker环境 已安装"
+      echo ""
    else
-     echo -e "${Error} Docker-compose环境 未安装，请先安装 !" && exit 1
-     echo ""
+      echo -e "${Error} Docker环境 未安装，请先安装 !"
+      echo ""
    fi
 }
 
+check_docker_not_installed(){
+    check_docker_installed_status
+    if [[ "$docker" == *Docker* ]]; then
+        echo ""
+    else
+        echo -e "${Error} Docker环境 未安装，请先安装 !" && exit 1
+        echo ""
+    fi
+}
+check_docker_compose_installed(){
+    check_docker_compose_installed_status
+     if [[ "$docker" == docker-compose* ]]; then
+         echo  -e "${Info} 检测到 Docker-compose环境 已安装"
+         echo ""
+         # 检查容器启动状态
+         check_pid_all
+       else
+         echo -e "${Error} Docker-compose环境 未安装，请先安装 !"
+         echo ""
+       fi
+}
+check_docker_compose_not_installed(){
+    check_docker_compose_installed_status
+     if [[ "$docker" == docker-compose* ]]; then
+         echo ""
+       else
+         echo -e "${Error} Docker-compose环境 未安装，请先安装 !" && exit 1
+         echo ""
+       fi
+}
+
+# 安装docker
 install_docker() {
    # 检查docker是否安装
-   docker=`docker version 2>&1 | head -1`
+   check_docker_installed_status
    if [[ "$docker" == *Docker* ]]; then
      echo  -e "${Error} 检测到 Docker环境 已安装" && exit 1
      echo ""
@@ -54,6 +84,7 @@ install_docker() {
     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     yum install -y docker-ce
     sudo mkdir -p /etc/docker
+    # 设置阿里私有镜像源
     sudo tee /etc/docker/daemon.json <<-'EOF'
         {
           "registry-mirrors": ["https://4xfke570.mirror.aliyuncs.com"]
@@ -62,16 +93,16 @@ EOF
     sudo systemctl daemon-reload
     sudo systemctl restart docker
 }
-
+# 安装docker_compose
 install_docker_compose(){
-   docker=`docker-compose version 2>&1 | head -1`
+   check_docker_compose_installed_status
    if [[ "$docker" == docker-compose* ]]; then
      echo  -e "${Error} 检测到 Docker-compose环境 已安装" && exit 1
      echo ""
    else
      echo ""
    fi
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
 }
 
@@ -148,16 +179,24 @@ check_pid_all(){
     check_run_echo
 }
 
+check_docker() {
+    check_docker_not_installed
+    check_docker_compose_not_installed
+}
+
 check_install() {
+    check_docker
     check_pid_pinpoint_collector
     [[ "${install}" == "" ]] && echo -e "${Error} pinpoint服務 未安装，请检查 !" && exit 1
 }
 check_start() {
+    check_docker
     check_pid_pinpoint_collector
     [[ "${install}" == "" ]] && echo -e "${Error} pinpoint服務 未安装，请检查 !" && exit 1
     [[ "${exist}" == "true" ]] && echo -e "${Error} pinpoint服務 正在运行，请检查 !" && exit 1
 }
 check_stop() {
+    check_docker
     check_pid_pinpoint_collector
     [[ "${install}" == "" ]] && echo -e "${Error} pinpoint服務 未安装，请检查 !" && exit 1
     [[ "${exist}" == "false" ]] && echo -e "${Error} pinpoint服務 已停止，请检查 !" && exit 1
@@ -245,21 +284,26 @@ rm_restart_pinpoint() {
     up_pinpoint
 }
 
-# 检查docker安装状态
-check_docker_installed_status
-check_docker_compose_installed_status
-# 检查容器启动状态
-check_pid_all
+
+
+check_all_install(){
+    # 检查docker安装状态
+    check_docker_installed
+    check_docker_compose_installed
+}
+
+check_all_install
 
 echo && echo -e "请输入一个数字来选择选项
- ${Green_font_prefix}1.${Font_color_suffix} 安装启动 pinpoint服務
- ${Green_font_prefix}2.${Font_color_suffix} 启    动 pinpoint服務
- ${Green_font_prefix}3.${Font_color_suffix} 停    止 pinpoint服務
- ${Green_font_prefix}4.${Font_color_suffix} 重    启 pinpoint服務
- ${Green_font_prefix}5.${Font_color_suffix} 删除重启 pinpoint服務
- ${Green_font_prefix}6.${Font_color_suffix} 删除容器 pinpoint服務
- ${Green_font_prefix}7.${Font_color_suffix} 删除容器 pinpoint服務
- ${Green_font_prefix}8.${Font_color_suffix} 删除容器 pinpoint服務
+ ${Green_font_prefix}1.${Font_color_suffix} 安装启动    pinpoint服務
+ ${Green_font_prefix}2.${Font_color_suffix} 启    动    pinpoint服務
+ ${Green_font_prefix}3.${Font_color_suffix} 停    止    pinpoint服務
+ ${Green_font_prefix}4.${Font_color_suffix} 重    启    pinpoint服務
+ ${Green_font_prefix}5.${Font_color_suffix} 删除重启    pinpoint服務
+ ${Green_font_prefix}6.${Font_color_suffix} 删除容器    pinpoint服務
+————————————
+ ${Green_font_prefix}7.${Font_color_suffix} 安装Docker  pinpoint服務
+ ${Green_font_prefix}8.${Font_color_suffix} 安装Compose pinpoint服務
 ————————————
  ${Green_font_prefix}9.${Font_color_suffix} 退出！
 ————————————" && echo
