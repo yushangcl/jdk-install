@@ -36,4 +36,6 @@ wget --no-check-certificate -O jrebel.sh https://raw.githubusercontent.com/yusha
 ### pinpoint install
 ```
 wget --no-check-certificate -O pinpoint.sh https://raw.githubusercontent.com/yushangcl/shell-install/master/pinpoint/pinpoint.sh && chmod +x pinpoint.sh && bash pinpoint.sh
+
+wget -O pinpoint.sh https://dwz.cn/AJspxu2f  && bash pinpoint.sh
 ```
