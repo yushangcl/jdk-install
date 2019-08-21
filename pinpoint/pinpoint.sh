@@ -411,7 +411,7 @@ case "$num" in
 	exit 1
 	;;
 	*)
-	echo "请输入正确数字 [1-9]"
+	echo "请输入正确数字 [0-9]"
 	;;
 esac
 
