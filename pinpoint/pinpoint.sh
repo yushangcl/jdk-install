@@ -278,12 +278,14 @@ start_pinpoint() {
 # 删除所有容器
 rm_pinpoint() {
     check_install
+    stop_pinpoint
     docker rm $(docker ps -a -q)
     echo -e "${Info} pinpoint容器 删除成功！ \n"
 }
 
 # 删除所有镜像
 rmi_image_pinpoint() {
+    rm_pinpoint
     docker rmi `docker images -q`
     echo -e "${Info} pinpoint镜像 删除成功！ \n"
 }
@@ -363,15 +365,16 @@ echo && echo -e "请输入一个数字来选择选项
  ${Green_font_prefix}4.${Font_color_suffix} 重    启    pinpoint服務
  ${Green_font_prefix}5.${Font_color_suffix} 删除重启    pinpoint服務
  ${Green_font_prefix}6.${Font_color_suffix} 删除容器    pinpoint服務
+ ${Green_font_prefix}7.${Font_color_suffix} 删除镜像    pinpoint服務
 ————————————
- ${Green_font_prefix}7.${Font_color_suffix} 安装Docker  pinpoint服務
- ${Green_font_prefix}8.${Font_color_suffix} 安装Compose pinpoint服務
+ ${Green_font_prefix}8.${Font_color_suffix} 安装Docker  pinpoint服務
+ ${Green_font_prefix}9.${Font_color_suffix} 安装Compose pinpoint服務
 ————————————
- ${Green_font_prefix}9.${Font_color_suffix} 退出！
+ ${Green_font_prefix}0.${Font_color_suffix} 退出！
 ————————————"
 echo "文档地址：﻿http://t.cn/AiQX0ptN" && echo
 
-stty erase '^H' && read -p " 请输入数字 [1-9]:" num
+stty erase '^H' && read -p " 请输入数字 [0-9]:" num
 case "$num" in
 	1)
 	install_docker
@@ -396,12 +399,15 @@ case "$num" in
 	rm_pinpoint
 	;;
 	7)
-	install_docker
+	rmi_image_pinpoint
 	;;
 	8)
-	install_docker_compose
+	install_docker
 	;;
 	9)
+	install_docker_compose
+	;;
+	0)
 	exit 1
 	;;
 	*)
