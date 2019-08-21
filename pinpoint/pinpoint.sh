@@ -17,6 +17,7 @@ Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
 # pinpoint安装路径
 install_path="/usr/local/pinpoint"
+ip=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1 -d '/'`
 
 #检查系统
 check_sys(){
@@ -123,6 +124,8 @@ install_docker() {
 EOF
     sudo systemctl daemon-reload
     sudo systemctl restart docker
+
+    echo  -e "${Info} Docker环境 已成功安装"
 }
 # 安装docker_compose
 install_docker_compose(){
@@ -135,6 +138,8 @@ install_docker_compose(){
    fi
     sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
+
+    echo  -e "${Info} Docker-compose环境 已成功安装"
 }
 
 # 检查pinpoint是否启动
@@ -220,6 +225,14 @@ check_install() {
     check_pid_pinpoint_collector
     [[ "${install}" == "" ]] && echo -e "${Error} pinpoint服務 未安装，请检查 !" && exit 1
 }
+
+check_is_install() {
+    check_docker
+    check_pid_pinpoint_collector
+    [[ "${install}" != "" ]] && echo -e "${Error} pinpoint服務 已安装，请检查 !" && exit 1
+    [[ "${exist}" == "true" ]] && echo -e "${Error} pinpoint服務 正在运行，请检查 !" && exit 1
+}
+
 check_start() {
     check_docker
     check_pid_pinpoint_collector
@@ -232,7 +245,6 @@ check_stop() {
     [[ "${install}" == "" ]] && echo -e "${Error} pinpoint服務 未安装，请检查 !" && exit 1
     [[ "${exist}" == "false" ]] && echo -e "${Error} pinpoint服務 已停止，请检查 !" && exit 1
 }
-
 
 # 下载clone
 clone_pinpoint() {
@@ -290,14 +302,27 @@ useless() {
     echo
 }
 
+echo_success_Info(){
+    echo
+    echo
+    echo -e "${Info} ---------------PINPOINT服务访问的地址----------------"
+    echo -e "${Info} PINPOINT平台地址：http://127.0.0.1:8079/#/main"
+    echo
+    echo -e "${Info} ---------------pinpoint-agent下载地址----------------"
+    echo "https://upload-1251506627.cos.ap-shanghai.myqcloud.com/pinpoint-agent-1.8.4.tar.gz"
+    echo
+}
+
 # 安装 启动 pinpoint
 install_start_pinpoint(){
     # 检查是已经启动
-    check_start
+    check_is_install
     # 构建并启动
     clone_pinpoint
     up_pinpoint
     useless
+    check_pid_pinpoint_collector
+    echo_success_Info
 }
 
 
@@ -306,6 +331,7 @@ restart_pinpoint() {
     stop_pinpoint
     start_pinpoint
     useless
+    echo_success_Info
 }
 
 # 删除容器 并重启
@@ -323,12 +349,16 @@ check_all_install(){
     # 检查docker安装状态
     check_docker_installed
     check_docker_compose_installed
+    # 如果服务已启动就输出地址
+    check_pid_pinpoint_collector
+    [[ "${exist}" == "true" ]] && echo_success_Info
+
 }
 
 check_all_install
 
 echo && echo -e "请输入一个数字来选择选项
- ${Green_font_prefix}1.${Font_color_suffix} 安装启动    pinpoint服務
+ ${Green_font_prefix}1.${Font_color_suffix} 安装启动    pinpoint服務 (默认安装Docker环境)
  ${Green_font_prefix}2.${Font_color_suffix} 启    动    pinpoint服務
  ${Green_font_prefix}3.${Font_color_suffix} 停    止    pinpoint服務
  ${Green_font_prefix}4.${Font_color_suffix} 重    启    pinpoint服務
@@ -344,11 +374,14 @@ echo && echo -e "请输入一个数字来选择选项
 stty erase '^H' && read -p " 请输入数字 [1-9]:" num
 case "$num" in
 	1)
+	install_docker
+	install_docker_compose
 	install_start_pinpoint
 	;;
 	2)
 	start_pinpoint
 	useless
+	echo_success_Info
 	;;
 	3)
 	stop_pinpoint
