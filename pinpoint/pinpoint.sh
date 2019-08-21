@@ -4,9 +4,9 @@
 clear
 echo "    ################################################"
 echo "    #                                              #"
-echo "    #               Build pinpoint                #"
+echo "    #               Build pinpoint                 #"
 echo "    #            https://blog.itbat.cn             #"
-echo "    #                Version 0.4.1                 #"
+echo "    #                Version 0.0.1                 #"
 echo "    ################################################"
 echo
 # 设置展示颜色
@@ -17,6 +17,37 @@ Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
 # pinpoint安装路径
 install_path="/usr/local/pinpoint"
+
+#检查系统
+check_sys(){
+    if [[ -f /etc/redhat-release ]]; then
+        release="centos"
+    elif cat /etc/issue | grep -q -E -i "debian"; then
+        release="debian"
+    elif cat /etc/issue | grep -q -E -i "ubuntu"; then
+        release="ubuntu"
+    elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
+        release="centos"
+    elif cat /proc/version | grep -q -E -i "debian"; then
+        release="debian"
+    elif cat /proc/version | grep -q -E -i "ubuntu"; then
+        release="ubuntu"
+    elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
+        release="centos"
+    fi
+    bit=$(uname -m)
+
+}
+check_sys_install() {
+    check_sys
+    if [[ "${release} | grep -Eqi 'centos'" ]]; then
+        echo  -e "${Info} 系统环境：$release $bit"
+        echo ""
+    else
+        echo -e "${Error} 系统环境：$release $bit 该脚本不支持该系统"  && exit 1
+    fi
+}
+
 #检查安装状态
 check_docker_installed_status(){
    docker=`docker version 2>&1 | head -1`
@@ -287,6 +318,8 @@ rm_restart_pinpoint() {
 
 
 check_all_install(){
+    # 校验系统版本
+    check_sys_install
     # 检查docker安装状态
     check_docker_installed
     check_docker_compose_installed
