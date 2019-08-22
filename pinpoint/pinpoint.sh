@@ -86,7 +86,7 @@ check_docker_compose_installed(){
          echo ""
          # 检查docker 是否启动
          if [[ "-f docker stats | grep -Eqi 'Cannot'" ]]; then
-            echo -e "${Error} 检测到 Docker状态: ${Red_font_prefix}未启动！${Font_color_suffix} "
+            echo -e "${Error} 检测到 Docker状态: ${Red_font_prefix}未启动！ 请手动启动Docker 'sudo systemctl start docker'${Font_color_suffix} "
          else
             # 检查容器启动状态
             check_pid_all
@@ -222,7 +222,7 @@ check_pid_all(){
 check_docker() {
     check_docker_not_installed
     check_docker_compose_not_installed
-    start_docker
+#    start_docker
 }
 
 check_install() {
@@ -378,14 +378,15 @@ echo && echo -e "请输入一个数字来选择选项
  ${Green_font_prefix}6.${Font_color_suffix} 删除容器    pinpoint服務
  ${Green_font_prefix}7.${Font_color_suffix} 删除镜像    pinpoint服務
 ————————————
- ${Green_font_prefix}8.${Font_color_suffix} 安装Docker  pinpoint服務
- ${Green_font_prefix}9.${Font_color_suffix} 安装Compose pinpoint服務
+ ${Green_font_prefix}8.${Font_color_suffix}  安装Docker
+ ${Green_font_prefix}9.${Font_color_suffix}  安装Compose
+ ${Green_font_prefix}10.${Font_color_suffix} 启动Docker
 ————————————
  ${Green_font_prefix}0.${Font_color_suffix} 退出！
 ————————————"
 echo -e "${Tip} 文档地址：﻿http://t.cn/AiQX0ptN" && echo
 
-stty erase '^H' && read -p " 请输入数字 [0-9]:" num
+stty erase '^H' && read -p " 请输入数字 [0-10]:" num
 case "$num" in
 	1)
 	install_docker
@@ -418,11 +419,14 @@ case "$num" in
 	9)
 	install_docker_compose
 	;;
+	10)
+	start_docker
+	;;
 	0)
 	exit 1
 	;;
 	*)
-	echo "请输入正确数字 [0-9]"
+	echo "请输入正确数字 [0-10]"
 	;;
 esac
 
