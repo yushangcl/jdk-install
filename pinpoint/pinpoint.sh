@@ -252,7 +252,9 @@ check_stop() {
 }
 
 start_docker() {
+    echo -e "${Info} 正在启动 Docker  \n"
     sudo systemctl restart docker
+    echo -e "${Info} Docker 启动成功！ \n"
 }
 
 # 下载clone
