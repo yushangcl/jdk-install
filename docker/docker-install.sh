@@ -38,39 +38,64 @@ check_sys(){
 }
 
 #检查安装状态
-check_installed_status(){
+check_docker_installed_status(){
    docker=`docker version 2>&1 | head -1`
    if [[ "$docker" == docker* ]]; then
-     echo ""
+     echo -e "${Error} 检测到 Docker环境 已安装!" && exit 1
    else
-     echo -e "${Error} docker环境 未安装，请先安装 !" && exit 1
+     echo ""
    fi
+}
+
+check_docker_compose_installed(){
+    check_docker_compose_installed_status
+     if [[ "$docker" == docker-compose* ]]; then
+         echo -e "${Error} 检测到 Docker-compose环境 已安装!" && exit 1
+       else
+         echo ""
+       fi
 }
 
 install_docker(){
 
    if ${release} | grep -Eqi "centos"; then
-     yum update -y
-     yum install -y yum-utils device-mapper-persistent-data lvm2
-     yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-     yum install -y docker-ce
-     sudo mkdir -p /etc/docker
-     sudo tee /etc/docker/daemon.json <<-'EOF'
+      yum update -y
+      yum install -y yum-utils device-mapper-persistent-data lvm2
+      yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+      yum install -y docker-ce
+      sudo mkdir -p /etc/docker
+    # 设置阿里私有镜像源
+      sudo tee /etc/docker/daemon.json <<-'EOF'
         {
           "registry-mirrors": ["https://4xfke570.mirror.aliyuncs.com"]
         }
 EOF
-    sudo systemctl daemon-reload
-    sudo systemctl restart docker
+      sudo systemctl daemon-reload
+      sudo systemctl restart docker
    elif ${release} | grep -Eqi "debian|ubuntu"; then
-     apt-get update
-     apt-get install \
-     apt-transport-https \
-     ca-certificates \
-     curl \
-     software-properties-common
+     apt-get update -y
+     apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+     curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo apt-key add -
+     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+     apt-get install docker-ce
+     systemctl enable docker
    fi
 }
-check_sys
-#check_installed_status
-install_docker
+
+install_docker_compose() {
+     sudo curl -L "https://get.daocloud.io/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+     sudo chmod +x /usr/local/bin/docker-compose
+     echo  -e "${Info} Docker-compose环境 已成功安装"
+
+}
+
+install() {
+    check_sys
+    check_docker_installed_status
+    install_docker
+    check_docker_compose_installed
+    install_docker_compose
+}
+
+#安装
+install
