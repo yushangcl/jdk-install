@@ -141,6 +141,11 @@ install_docker_compose(){
 
 }
 
+check_docker_status(){
+   docker_status=`docker ps`
+   [["$docker_status" == **]]
+}
+
 # 检查pinpoint是否启动
 check_pid_pinpoint_collector(){
     exist=`docker inspect --format '{{.State.Running}}' pinpoint-collector`
@@ -217,6 +222,7 @@ check_pid_all(){
 check_docker() {
     check_docker_not_installed
     check_docker_compose_not_installed
+    start_docker
 }
 
 check_install() {
@@ -243,6 +249,10 @@ check_stop() {
     check_pid_pinpoint_collector
     [[ "${install}" == "" ]] && echo -e "${Error} pinpoint服務 未安装，请检查 !" && exit 1
     [[ "${exist}" == "false" ]] && echo -e "${Error} pinpoint服務 已停止，请检查 !" && exit 1
+}
+
+start_docker() {
+    sudo systemctl restart docker
 }
 
 # 下载clone
@@ -371,7 +381,7 @@ echo && echo -e "请输入一个数字来选择选项
 ————————————
  ${Green_font_prefix}0.${Font_color_suffix} 退出！
 ————————————"
-echo -e "${Tip}文档地址：﻿http://t.cn/AiQX0ptN" && echo
+echo -e "${Tip} 文档地址：﻿http://t.cn/AiQX0ptN" && echo
 
 stty erase '^H' && read -p " 请输入数字 [0-9]:" num
 case "$num" in
