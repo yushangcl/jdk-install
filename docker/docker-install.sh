@@ -41,7 +41,7 @@ check_sys(){
 check_docker_installed_status(){
    docker=`docker version 2>&1 | head -1`
    if [[ "$docker" == docker* ]]; then
-     echo -e "${Error} 检测到 Docker环境 已安装!" && exit 1
+     echo -e "${Error} 检测到 Docker环境 已安装!" && check_docker_compose_installed
    else
      echo ""
    fi
