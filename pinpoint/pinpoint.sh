@@ -84,8 +84,13 @@ check_docker_compose_installed(){
      if [[ "$docker" == docker-compose* ]]; then
          echo  -e "${Info} 检测到 Docker-compose环境 已安装"
          echo ""
-         # 检查容器启动状态
-         check_pid_all
+         # 检查docker 是否启动
+         if [[ "-f docker stats | grep -Eqi 'Cannot'" ]]; then
+            echo -e "${Error} 检测到 Docker状态: ${Red_font_prefix}未启动！${Font_color_suffix} "
+         else
+            # 检查容器启动状态
+            check_pid_all
+         fi
        else
          echo -e "${Error} Docker-compose环境 未安装，请先安装 !"
          echo ""
@@ -139,11 +144,6 @@ install_docker_compose(){
      echo  -e "${Info} Docker-compose环境 已成功安装"
    fi
 
-}
-
-check_docker_status(){
-   docker_status=`docker ps`
-   [["$docker_status" == **]]
 }
 
 # 检查pinpoint是否启动
@@ -359,10 +359,10 @@ check_all_install(){
     # 检查docker安装状态
     check_docker_installed
     check_docker_compose_installed
+
     # 如果服务已启动就输出地址
     check_pid_pinpoint_collector
     [[ "${exist}" == "true" ]] && echo_success_Info
-
 }
 
 check_all_install
