@@ -72,6 +72,7 @@ install_docker(){
 EOF
       sudo systemctl daemon-reload
       sudo systemctl restart docker
+      systemctl enable docker
    elif ${release} | grep -Eqi "debian|ubuntu"; then
      apt-get update -y
      apt-get install -y apt-transport-https ca-certificates curl software-properties-common

@@ -127,7 +127,7 @@ install_docker() {
 EOF
     sudo systemctl daemon-reload
     sudo systemctl restart docker
-
+    systemctl enable docker
     echo  -e "${Info} Docker环境 已成功安装"
    fi
 
