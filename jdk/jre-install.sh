@@ -163,6 +163,6 @@ Install_jre
 
 echo
 echo "*******安装结束********"
-echo "安装路径为:" `which java`
+echo "安装路径为:$jre_file_path"
 echo ""
 echo "${Tip}请手动执行命令：source /etc/profile "
