@@ -135,6 +135,7 @@ tar_install(){
 add_path(){
     cd $jre_file_path/jre*
     home=$(cd `dirname $0`; pwd)
+    echo "" >> /etc/profile
     echo "#JAVA_HOME" >> /etc/profile
     echo "JAVA_HOME=${home}" >> /etc/profile
     echo "CLASSPATH=\$JAVA_HOME/lib" >> /etc/profile
