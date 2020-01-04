@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#URL: https://github.com/shell-install/jre/jre-install
+#URL: https://github.com/shell-install/jdk/jre-install
 #E-mail: gayhub@live.cn
 clear
 echo "    ################################################"
