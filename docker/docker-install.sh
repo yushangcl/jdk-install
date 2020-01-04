@@ -57,7 +57,6 @@ check_docker_compose_installed(){
 }
 
 install_docker(){
-
    if ${release} | grep -Eqi "centos"; then
       yum update -y
       yum install -y yum-utils device-mapper-persistent-data lvm2
