@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#URL: https://github.com/shell-install/jdk/jre-install
+#URL: https://github.com/shell-install/jre/jre-install
 #E-mail: gayhub@live.cn
 clear
 echo "    ################################################"
@@ -11,14 +11,14 @@ echo "    ################################################"
 echo
 
 #jdk安装路径
-jdk_file_path="/usr/local/jre"
+jre_file_path="/usr/local/jre"
 
 #jdk下载临时目录
-jdk_temp="/var/tmp/jre"
+jre_temp="/var/tmp/jre"
 choice_mun=0
 
 #默认jdk版本
-jdk="jre-8u171-linux.tar.gz"
+jre="jre=jre-8u221-linux-x64.tar.gz"
 
 # 设置展示颜色
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -64,9 +64,9 @@ check_installed_status(){
 #用户设置安装版本
 set_version(){
     echo && echo -e "请输入一个数字来选择选项"
-    echo -e " ${Green_font_prefix}1.${Font_color_suffix} 安装 JDK 7"
-    echo -e " ${Green_font_prefix}2.${Font_color_suffix} 安装 JDK 8"
-    echo -e " ${Green_font_prefix}3.${Font_color_suffix} 安装 JDK 10"
+    echo -e " ${Green_font_prefix}1.${Font_color_suffix} 安装 jre 7"
+    echo -e " ${Green_font_prefix}2.${Font_color_suffix} 安装 jre 8"
+    echo -e " ${Green_font_prefix}3.${Font_color_suffix} 安装 jre 10"
     echo
     stty erase '^H' && read -p " 请输入数字 [1-3]:" choice_mun
     echo
@@ -74,21 +74,47 @@ set_version(){
 }
 
 
-download_jdk8(){
-      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -O "$jdk"  -P ${jdk_temp} "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=233162_512cd62ec5174c3487ac17c61aaa89e8"
+download_jre7(){
+    if [[ ${bit} == "x86_64" ]]; then
+      jre=jre-7u80-linux-x64.tar.gz
+      wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jre/"$jre" -P ${jre_temp}
+    else
+      jre=jre-7u80-linux-i586.tar.gz
+      # 由于oracle官网需要登录下载jdk7 则现在从cos下载
+      wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jre/"$jre" -P ${jre_temp}
+    fi
+}
+
+download_jre8(){
+    if [[ ${bit} == "x86_64" ]]; then
+      jre=jre-8u221-linux-x64.tar.gz
+      wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jre/"$jre" -P ${jre_temp}
+    else
+      jre=jre-8u221-linux-i586.tar.gz
+      wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jre/"$jre"-P ${jre_temp}
+    fi
+}
+
+download_jre10(){
+    if [[ ${bit} == "x86_64" ]]; then
+      jre=jre-10.0.2_linux-x64_bin.tar.gz
+       wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jre/"$jre" -P ${jre_temp}
+    else
+      echo "${Error}*******jdk10不支持32位操作系统，请选择64位安装*******" && exit 1
+    fi
 }
 
 # 下载安装包
 download(){
     case "$choice_mun" in
         1)
-        #download_jdk7
+        download_jre7
         ;;
         2)
-        download_jdk8
+        download_jre8
         ;;
         3)
-        #download_jdk10
+        download_jre10
         ;;
         *)
         echo "${Error}请输入正确数字 [1-3]" && exit 1
@@ -98,16 +124,16 @@ download(){
 
 #解压安装
 tar_install(){
-    [[ ! -e "$jdk_temp/$jdk" ]] && echo -e "${Error} JDK 下载失败 !" && exit 1
-    [[ ! -e "$jdk_file_path" ]] && mkdir "$jdk_file_path"
-    tar xzf "$jdk_temp/$jdk" -C "$jdk_file_path/"
-    [[ ! -e "$jdk_file_path/" ]] && echo -e "${Error} JDK 解压失败(可能是 压缩包损坏 或者 没有安装 Gzip) !" && exit 1
-    rm -rf "$jdk_temp/$jdk"
+    [[ ! -e "$jre_temp/$jre" ]] && echo -e "${Error} jre 下载失败 !" && exit 1
+    [[ ! -e "$jre_file_path" ]] && mkdir "$jre_file_path"
+    tar xzf "$jre_temp/$jre" -C "$jre_file_path/"
+    [[ ! -e "$jre_file_path/" ]] && echo -e "${Error} jre 解压失败(可能是 压缩包损坏 或者 没有安装 Gzip) !" && exit 1
+    rm -rf "$jre_temp/$jre"
 }
 
 #设置环境变量
 add_path(){
-    cd $jdk_file_path/jdk*
+    cd $jre_file_path/jre*
     home=$(cd `dirname $0`; pwd)
     echo "#JAVA_HOME" >> /etc/profile
     echo "JAVA_HOME=${home}" >> /etc/profile
@@ -116,14 +142,14 @@ add_path(){
 }
 
 #主方法
-Install_jdk(){
+Install_jre(){
     echo && echo -e "${Info} 开始检查 系统环境..."
     check_sys
     echo && echo -e "${Info} 开始检查 安装状态..."
     check_installed_status
     echo && echo -e "${Info} 开始设置 安装版本..."
     set_version
-    echo && echo -e "${Info} 开始下载 JDK安装包..."
+    echo && echo -e "${Info} 开始下载 JRE安装包..."
     download
     echo && echo -e "${Info} 解压安装中..."
     tar_install
@@ -132,7 +158,7 @@ Install_jdk(){
 }
 
 #安装
-Install_jdk
+Install_jre
 
 echo
 echo "*******安装结束********"
