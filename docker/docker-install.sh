@@ -64,14 +64,6 @@ install_docker(){
       yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
       yum install -y docker-ce
       sudo mkdir -p /etc/docker
-    # 设置阿里私有镜像源
-      sudo tee /etc/docker/daemon.json <<-'EOF'
-        {
-          "registry-mirrors": ["https://4xfke570.mirror.aliyuncs.com"]
-        }
-EOF
-      sudo systemctl daemon-reload
-      sudo systemctl restart docker
       systemctl enable docker
    elif ${release} | grep -Eqi "debian|ubuntu"; then
      apt-get update -y
@@ -81,6 +73,18 @@ EOF
      apt-get install docker-ce
      systemctl enable docker
    fi
+   set_ali_daemon
+}
+
+set_ali_daemon(){
+    # 设置阿里私有镜像源
+      sudo tee /etc/docker/daemon.json <<-'EOF'
+        {
+          "registry-mirrors": ["https://4xfke570.mirror.aliyuncs.com"]
+        }
+EOF
+      sudo systemctl daemon-reload
+      sudo systemctl restart docker
 }
 
 install_docker_compose() {
