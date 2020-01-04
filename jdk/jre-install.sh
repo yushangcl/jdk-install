@@ -140,6 +140,7 @@ add_path(){
     echo "JAVA_HOME=${home}" >> /etc/profile
     echo "CLASSPATH=\$JAVA_HOME/lib" >> /etc/profile
     echo "PATH=\$PATH:\$JAVA_HOME/bin" >> /etc/profile
+    echo "" >> /etc/profile
 }
 
 #主方法
