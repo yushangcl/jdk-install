@@ -87,11 +87,12 @@ download_jdk7(){
 
 download_jdk8(){
     if [[ ${bit} == "x86_64" ]]; then
-      jdk=jdk-8u171-linux-x64.tar.gz
-      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" -P ${jdk_temp} "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
+     jdk=jdk-8u201-linux-x64.tar.gz
+      wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jdk/"$jdk" -P ${jdk_temp}
     else
-      jdk=jdk-8u171-linux-i586.tar.gz
-      wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"  -P ${jdk_temp} "http://download.oracle.com/otn-pub/java/jdk/8u171-b11/512cd62ec5174c3487ac17c61aaa89e8/$jdk"
+       jdk=jdk-8u201-linux-i586.tar.gz
+      # 由于oracle官网需要登录下载jdk7 则现在从cos下载
+      wget https://cos-1251506627.cos.ap-shanghai.myqcloud.com/soft/jdk/"$jdk" -P ${jdk_temp}
     fi
 }
 
