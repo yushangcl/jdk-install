@@ -96,7 +96,7 @@ Read_config(){
 Install_license(){
     Set_port
     Write_config
-    wget -P ${license_install_path/} "https://github.com/yushangcl/LicenseServer/releases/download/1.0.0/LicenseServer-1.0-jar-with-dependencies.jar"
+     wget --no-check-certificate  -P ${license_install_path/} "https://raw.githubusercontent.com/yushangcl/shell-install/master/intelliandjrebel/binaries/LicenseServer-1.0-jar-with-dependencies.jar"
 }
 
 #卸载
